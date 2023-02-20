@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CSharp_Computational_mathematics
 {
     delegate double FunctionPattern(double x);
-    interface ISimpleIteration
+    interface IFuncCalculator
     {
         /// <summary>
         /// Точность ответа
@@ -18,11 +18,6 @@ namespace CSharp_Computational_mathematics
         /// Функция, где ищем ответ
         /// </summary>
         FunctionPattern Function { get; set; }
-
-        /// <summary>
-        /// Функция для пересечения
-        /// </summary>
-        FunctionPattern IntersectionFunction { get; set; }
 
         /// <summary>
         /// Поиск решений на заданном интервале. Возвращает массив значений x, при которой функция равна y

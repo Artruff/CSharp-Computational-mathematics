@@ -18,8 +18,8 @@ namespace CSharp_Computational_mathematics
 
         static void Main(string[] args)
         {
-            ISimpleIteration si = new SimpleIteration(new FunctionPattern(Function1));
-            var res = si.SolveEquation(0, -10, 10);
+            IFuncCalculator calculator = new NewtonIterator(new FunctionPattern(Function2));
+            var res = calculator.SolveEquation(0, -4, 5);
             foreach(double r in res)
             {
                 Console.WriteLine(r);

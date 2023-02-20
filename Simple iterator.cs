@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharp_Computational_mathematics
 {
-    class SimpleIteration : ISimpleIteration
+    class SimpleIterator : IFuncCalculator
     {
         //Функция, в которой ищем решение
         private FunctionPattern _Function = null;
@@ -24,7 +24,7 @@ namespace CSharp_Computational_mathematics
         /// </summary>
         /// <param name="mainFunction">Главная функция, в которой требуется найти ответ</param>
         /// <param name="accuracy">Точность ответа</param>
-        public SimpleIteration(FunctionPattern mainFunction, double accuracy = 0.001)
+        public SimpleIterator(FunctionPattern mainFunction, double accuracy = 0.001)
         {
             if (mainFunction == null)
                 throw new ArgumentException("Главная функция не должна быть пустой");
@@ -38,7 +38,7 @@ namespace CSharp_Computational_mathematics
         /// Стандартная функция пересечения для поиска ответа
         /// </summary>
         /// <param name="x">Значение аргумента x функции</param>
-        /// <returns></returns>
+        /// <returns>Значенине функции при данном корне x</returns>
         private double _SimpleIntersectionFunction(double x) => x;
         public double accuracy
         {
@@ -66,7 +66,7 @@ namespace CSharp_Computational_mathematics
         /// Производная главной функции
         /// </summary>
         /// <param name="x">Значение аргумента x функции</param>
-        /// <returns></returns>
+        /// <returns>Массив корней x, при которых функция равна y</returns>
         public double FunctionDerivative(double x) => (Function(x + _stepDerivative) - Function(x)) / (_stepDerivative);
         public FunctionPattern IntersectionFunction
         {
@@ -85,7 +85,7 @@ namespace CSharp_Computational_mathematics
         /// <param name="variableY">Значение результата функции</param>
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
-        /// <returns></returns>
+        /// <returns>Массив корней x, при которых функция равна y</returns>
         public double[] SolveEquation(double variableY, double minX, double maxX)
         {
             //Проверка промежутка
