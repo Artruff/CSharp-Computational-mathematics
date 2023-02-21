@@ -116,7 +116,7 @@ namespace CSharp_Computational_mathematics
 
         //                tmpResult = FunctionDerivative(x);
         //                x -= (tmpResult / derivative);
-        //            } while ((Math.Abs(x)>accuracy) && x <= maxX);
+        //            } while ((Math.Abs(x) > accuracy) && x <= maxX);
 
         //            minX = x;
         //            tmpResult = Function(x);
