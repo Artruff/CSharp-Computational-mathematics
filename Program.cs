@@ -18,7 +18,7 @@ namespace CSharp_Computational_mathematics
 
         static void Main(string[] args)
         {
-            IFuncCalculator calculator = new NewtonIterator(new FunctionPattern(Function2));
+            IFuncCalculator calculator = new NewtonIterator(new FunctionPattern(Function1), 0.001);
             var res = calculator.SolveEquation(0, -4, 5);
             foreach(double r in res)
             {

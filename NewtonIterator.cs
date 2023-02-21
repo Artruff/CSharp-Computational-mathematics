@@ -72,75 +72,6 @@ namespace CSharp_Computational_mathematics
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns>Массив корней x, при которых функция равна y</returns>
-        //public double[] SolveEquation(double variableY, double minX, double maxX)
-        //{
-        //    //Проверка промежутка
-        //    if (maxX <= minX)
-        //        throw new ArgumentException("Конец промежутка поиска не может быть меньше или равен минимума");
-
-        //    List<double> result = new List<double>();
-        //    int direction;
-        //    double x = minX, tmpResult, derivative, tmpX;
-
-        //    while (x <= maxX)
-        //    {
-        //        tmpResult = Function(x);
-        //        derivative = FunctionDerivative(x);
-        //        if (Math.Abs(variableY - tmpResult) < accuracy)
-        //        {
-        //            result.Add(x);
-
-        //            //x += accuracy;
-        //            //direction = (int)(derivative / Math.Abs(derivative));
-        //            //double tmpDerivative = FunctionDerivative(x);
-        //            //do
-        //            //{
-        //            //    x += (tmpResult / tmpDerivative);
-        //            //    tmpResult = Function(x);
-        //            //    tmpDerivative = FunctionDerivative(x);
-        //            //} while (direction == (int)(tmpDerivative / Math.Abs(tmpDerivative)) && x <= maxX);
-
-        //            //minX = x;
-        //            //derivative = FunctionDerivative(x);
-
-        //            x += accuracy;
-        //            do
-        //            {
-        //                derivative = SecondFunctionDerivative(x);
-
-        //                while (derivative == 0 && x <= maxX)
-        //                {
-        //                    x += accuracy;
-        //                    derivative = SecondFunctionDerivative(x);
-        //                }
-
-        //                tmpResult = FunctionDerivative(x);
-        //                x -= (tmpResult / derivative);
-        //            } while ((Math.Abs(x) > accuracy) && x <= maxX);
-
-        //            minX = x;
-        //            tmpResult = Function(x);
-        //            derivative = FunctionDerivative(x);
-        //        }
-
-        //        if (Math.Abs(0 - derivative) < accuracy)
-        //        {
-        //            x += accuracy;
-        //            continue;
-        //        }
-
-        //        tmpX = x - (tmpResult / derivative);
-        //        while (tmpX < minX || tmpX > maxX)
-        //            tmpX = x - (tmpResult / derivative) / tmpX;
-
-        //        x = tmpX;
-        //    }
-
-        //    result.Sort();
-
-        //    return result.ToArray();
-        //}
-
         public double[] SolveEquation(double variableY, double minX, double maxX)
         {
             //Проверка промежутка
@@ -154,14 +85,15 @@ namespace CSharp_Computational_mathematics
             {
                 tmpResult = Function(x);
 
-                //while ((x >= maxX || x <= minX) && (x <= maxX && x >= minX))
-                //    x += direction * accuracy;
-
                 derivative = FunctionDerivative(x);
+                //Если касательная приблизилась к ответу, то
                 if (Math.Abs(variableY - tmpResult) < accuracy)
                 {
+                    //Добавляем ответ
                     result.Add(x);
 
+                    //Ищем подъём функции (Смена знака производной)
+                    //что бы запустить новую итерацию
                     x += direction * accuracy;
                     int tmpDirection = (int)(derivative / Math.Abs(derivative));
                     double tmpDerivative = FunctionDerivative(x);
@@ -172,10 +104,11 @@ namespace CSharp_Computational_mathematics
                         tmpDerivative = FunctionDerivative(x);
                     } while (tmpDirection == (int)(tmpDerivative / Math.Abs(tmpDerivative)) && (x <= maxX || x <= minX));
 
-
+                    //Меняем направление поиска решений
                     direction *= -1;
                     derivative = FunctionDerivative(x);
 
+                    //обрезаем промежуток поиска решений
                     if (direction == -1)
                     {
                         minX = x;
@@ -187,6 +120,7 @@ namespace CSharp_Computational_mathematics
                         x = minX;
                     }
 
+                    //Проверка на остаток промежутка
                     if (maxX <= minX)
                         break;
                     else
@@ -199,6 +133,8 @@ namespace CSharp_Computational_mathematics
                     continue;
                 }
 
+                //Итерируем x по методу Ньютона. Если итерация выходит за пределы промежутка
+                //То уменьшаем её длину, что бы она оказалась в промежутке
                 tmpX = x - (tmpResult / derivative);
                 while (tmpX < minX || tmpX > maxX)
                     tmpX = x - (tmpResult / derivative) / tmpX;
