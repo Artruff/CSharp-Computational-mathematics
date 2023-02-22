@@ -136,7 +136,7 @@ namespace CSharp_Computational_mathematics
                 //Итерируем x по методу Ньютона. Если итерация выходит за пределы промежутка
                 //То уменьшаем её длину, что бы она оказалась в промежутке
                 tmpX = x - (tmpResult / derivative);
-                while (tmpX < minX || tmpX > maxX)
+                if (tmpX < minX || tmpX > maxX)
                     tmpX = x - (tmpResult / derivative) / tmpX;
 
                 x = tmpX;
