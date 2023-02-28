@@ -14,8 +14,6 @@ namespace CSharp_Computational_mathematics
         private double _accuracy;
         //Шаг для производной
         private const double _stepDerivative = 0.00000000000065;
-        // Ширина промежутков, на которых ищем значения
-        private double _gapsWidth;
 
         /// <summary>
         /// Конструктор объекта простых итераций
@@ -29,21 +27,6 @@ namespace CSharp_Computational_mathematics
             else
                 _Function = new FunctionPattern(mainFunction);
             _accuracy = accuracy;
-            _gapsWidth = gapsWidth;
-        }
-        /// <summary>
-        /// Ширина промежутков, на которых ищем значения
-        /// </summary>
-        public double gapsWidth
-        {
-            get => _gapsWidth;
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("Ширина промежутков не может быть отрицательной.");
-                else
-                    _gapsWidth = value;
-            }
         }
         public double accuracy
         {
@@ -81,48 +64,32 @@ namespace CSharp_Computational_mathematics
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns>Массив корней x, при которых функция равна y</returns>
-        public double[] SolveEquation(double variableY, double minX, double maxX)
+        public double SolveEquation(double variableY, double minX, double maxX)
         {
             //Проверка промежутка
             if (maxX <= minX)
                 throw new ArgumentException("Конец промежутка поиска не может быть меньше или равен минимума");
 
-            List<double> result = new List<double>();
-
-            double tmpMinX, tmpMaxX = minX, minValue, maxValue, x;
-
-            do
+            double minValue = Function(minX), maxValue = Function(maxX), x;
+            
+            //Если прямая значений функции в границах промежутка не пересекает
+            //искомое значение, то берём следующий промежуток
+            //Иначе итерируем x по методу хорд, пока не приблизимся к решению
+            if(minValue<variableY && maxValue> variableY)
             {
-                //Выделяем промежуток для поиска ответа
-                tmpMinX = tmpMaxX;
-                tmpMaxX = tmpMinX + _gapsWidth;
-
-                minValue = Function(tmpMinX);
-                maxValue = Function(tmpMaxX);
-
-                //Если прямая значений функции в границах промежутка не пересекает
-                //искомое значение, то берём следующий промежуток
-                //Иначе итерируем x по методу хорд, пока не приблизимся к решению
-                if(minValue<variableY && maxValue> variableY)
-                {
-                    x = tmpMinX;
-                    while(Math.Abs(variableY-Function(x))>accuracy)
-                        x = x - ((tmpMaxX - x) * Function(x)) / (Function(tmpMaxX) - Function(x));
-                    result.Add(x);
-                }
-                else if(minValue > variableY && maxValue< variableY)
-                {
-                    x = tmpMaxX;
-                    while (Math.Abs(variableY - Function(x)) > accuracy)
-                        x = x-((x-tmpMinX)*Function(x))/(Function(x)-Function(tmpMinX));
-                    result.Add(x);
-                }
-                else
-                    continue;
-                //Продолжаем пока не пройдём весь промежуток
-            } while (tmpMaxX < maxX);
-
-            return result.ToArray();
+                x = minX;
+                while(Math.Abs(variableY-Function(x))>accuracy)
+                    x = x - ((maxX - x) * Function(x)) / (Function(maxX) - Function(x));
+                return x;
+            }
+            else if(minValue > variableY && maxValue< variableY)
+            {
+                x = maxX;
+                while (Math.Abs(variableY - Function(x)) > accuracy)
+                    x = x-((x- minX) *Function(x))/(Function(x)-Function(minX));
+                return x;
+            }
+            throw new ArithmeticException("На отрезке не получилось найти решение");
         }
     }
 }

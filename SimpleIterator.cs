@@ -86,7 +86,7 @@ namespace CSharp_Computational_mathematics
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns>Массив корней x, при которых функция равна y</returns>
-        public double[] SolveEquation(double variableY, double minX, double maxX)
+        public double SolveEquation(double variableY, double minX, double maxX)
         {
             //Проверка промежутка
             if (maxX <= minX)
@@ -95,10 +95,6 @@ namespace CSharp_Computational_mathematics
             //Максимум функции и переменные промежуточных расчётов
             double max = Math.Abs(FunctionDerivative(minX)), tmpX = minX, tmpResult, y,
                 step = (maxX - minX) / _countMaxIteration;
-            //Флаг области решений. Нужен для того, что бы когда функция находит несколько решений, представляющих
-            //из себя одно решение с некоторой погрешностью, она выбирала самый точный результат
-            bool responseInterval = false;
-            List<double> result = new List<double>();
             //Поиск максимума функции
             do
             {
@@ -123,29 +119,10 @@ namespace CSharp_Computational_mathematics
                 //то добавляем x к массиву результатов
                 y = _Function(tmpResult);
                 if (Math.Abs((variableY - y)) < _accuracy)
-                {
-                    //Если на промежутке найден более точное значение x, то возьмём его
-                    if (responseInterval && (variableY - _Function(result.Last<double>()) > y))
-                        result[result.Count - 1] = y;
-
-                    //
-                    else if (!responseInterval)
-                    {
-                        result.Add(tmpResult);
-                        responseInterval = true;
-                    }
-                    tmpX = tmpResult +_accuracy;
-                }
-                //Переходим к следующему значению x
-                else
-                {
-                    responseInterval = false;
-                    tmpX = tmpResult;
-                }
+                    return tmpResult;
             }
             while(tmpX<maxX); //Продолжаем пока не пройдём весь промежуток поиска функции
-
-            return result.ToArray();
+            throw new AggregateException("Не удалось найти решения на промежутке");
         }
     }
 }

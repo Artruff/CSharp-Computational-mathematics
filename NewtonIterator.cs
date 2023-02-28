@@ -72,79 +72,29 @@ namespace CSharp_Computational_mathematics
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns>Массив корней x, при которых функция равна y</returns>
-        public double[] SolveEquation(double variableY, double minX, double maxX)
+        public double SolveEquation(double variableY, double minX, double maxX)
         {
             //Проверка промежутка
             if (maxX <= minX)
                 throw new ArgumentException("Конец промежутка поиска не может быть меньше или равен минимума");
 
-            List<double> result = new List<double>();
-            int direction = 1;
-            double x = minX, tmpResult, derivative, tmpX;
-            while (maxX >= minX)
+            double x = minX, tmpResult, derivative;
+            while (true)
             {
                 tmpResult = Function(x);
 
                 derivative = FunctionDerivative(x);
                 //Если касательная приблизилась к ответу, то
                 if (Math.Abs(variableY - tmpResult) < accuracy)
-                {
-                    //Добавляем ответ
-                    result.Add(x);
-
-                    //Ищем подъём функции (Смена знака производной)
-                    //что бы запустить новую итерацию
-                    x += direction * accuracy;
-                    int tmpDirection = (int)(derivative / Math.Abs(derivative));
-                    double tmpDerivative = FunctionDerivative(x);
-                    do
-                    {
-                        x += (tmpResult / tmpDerivative);
-                        tmpResult = Function(x);
-                        tmpDerivative = FunctionDerivative(x);
-                    } while (tmpDirection == (int)(tmpDerivative / Math.Abs(tmpDerivative)) && (x <= maxX || x <= minX));
-
-                    //Меняем направление поиска решений
-                    direction *= -1;
-                    derivative = FunctionDerivative(x);
-
-                    //обрезаем промежуток поиска решений
-                    if (direction == -1)
-                    {
-                        minX = x;
-                        x = maxX;
-                    }
-                    else
-                    {
-                        maxX = x;
-                        x = minX;
-                    }
-
-                    //Проверка на остаток промежутка
-                    if (maxX <= minX)
-                        break;
-                    else
-                        continue;
-                }
-
-                if (Math.Abs(0 - derivative) < accuracy)
-                {
-                    x += direction * accuracy;
-                    continue;
-                }
+                    return x;
 
                 //Итерируем x по методу Ньютона. Если итерация выходит за пределы промежутка
                 //То уменьшаем её длину, что бы она оказалась в промежутке
-                tmpX = x - (tmpResult / derivative);
-                if (tmpX < minX || tmpX > maxX)
-                    tmpX = x - (tmpResult / derivative) / tmpX;
+                x -= (tmpResult / derivative);
 
-                x = tmpX;
+                if (x < minX || x > maxX)
+                    throw new ArithmeticException("На отрезке не получилось найти решение");
             }
-
-            result.Sort();
-
-            return result.ToArray();
         }
     }
 }

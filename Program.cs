@@ -20,12 +20,15 @@ namespace CSharp_Computational_mathematics
 
         static void Main(string[] args)
         {
-            IFuncCalculator calculator = new HordIterator(new FunctionPattern(Function4), 0.001);
-            var res = calculator.SolveEquation(0, -10, 10);
-            foreach(double r in res)
+            for (int i = 0; i < 200; i++)
             {
-                Console.WriteLine(r);
+                IFuncCalculator calculator = new SimpleIterator(new FunctionPattern(AdditionalFunction), Math.Pow(0.1, i));
+                var res = calculator.SolveEquation(0, 0, 1);
+                Console.WriteLine("iter: " + i.ToString());
+                Console.WriteLine("func: " + calculator.Function(res));
+                Console.WriteLine(res);
             }
+
         }
     }
 }

@@ -26,6 +26,6 @@ namespace CSharp_Computational_mathematics
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns></returns>
-        double[] SolveEquation(double variableY, double minX, double maxX);
+        double SolveEquation(double variableY, double minX, double maxX);
     }
 }
