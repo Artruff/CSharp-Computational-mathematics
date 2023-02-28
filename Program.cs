@@ -23,7 +23,7 @@ namespace CSharp_Computational_mathematics
             for (int i = 0; i < 200; i++)
             {
                 IFuncCalculator calculator = new SimpleIterator(new FunctionPattern(AdditionalFunction), Math.Pow(0.1, i));
-                var res = calculator.SolveEquation(0, 0, 1);
+                var res = calculator.SolveEquation(0, -1, 0);
                 Console.WriteLine("iter: " + i.ToString());
                 Console.WriteLine("func: " + calculator.Function(res));
                 Console.WriteLine(res);

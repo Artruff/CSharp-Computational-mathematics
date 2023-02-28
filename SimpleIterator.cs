@@ -120,6 +120,7 @@ namespace CSharp_Computational_mathematics
                 y = _Function(tmpResult);
                 if (Math.Abs((variableY - y)) < _accuracy)
                     return tmpResult;
+                tmpX = tmpResult;
             }
             while(tmpX<maxX); //Продолжаем пока не пройдём весь промежуток поиска функции
             throw new AggregateException("Не удалось найти решения на промежутке");
